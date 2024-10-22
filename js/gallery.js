@@ -65,48 +65,32 @@ const images = [
 ];
 
 
-// Знаходимо елемент з класом 'gallery' на сторінці
-const gallery = document.querySelector('.gallery');
 
-// Створюємо масив рядків HTML з кожного елемента масиву images
+const gallery = document.querySelector('.gallery');
 const arrayGalleryItem = images.map(({ preview, original, description }) =>
     `<li class="gallery-item">
-        <a class="gallery-link" href="${original}">
-            <img class="gallery-image"
-                 src="${preview}"
-                 data-source="${original}"
-                 alt="${description}" />
-        </a>
-    </li>`
-);
-
-// Об'єднуємо всі рядки масиву в один рядок HTML
+<a class="gallery-link" href="${original}">
+<img
+class="gallery-image"
+src="${preview}" 
+data-source="${original}" 
+alt="${description}"/>
+</a>
+</li>`);
 const galleryItemString = arrayGalleryItem.join('');
-
-// Додаємо цей HTML рядок у кінець елемента gallery
 gallery.insertAdjacentHTML("beforeend", galleryItemString);
 
-// Додаємо обробник подій для кліку на елементі gallery
 gallery.addEventListener('click', handleClick);
 
-// Функція обробки кліку
 function handleClick(event) {
-    // Запобігаємо діям за замовчуванням для події (наприклад, відкриття посилання)
     event.preventDefault();
-    
-    // Перевіряємо, чи елемент, на якому відбулася подія, є зображенням
     if (event.target.nodeName !== 'IMG') {
-        return; // Якщо ні, то виходимо з функції
-    }
-    
-    // Отримуємо URL великого зображення з атрибуту data-source
+        return;
+    } 
     const largeImageUrl = event.target.getAttribute('data-source');
+    const instance = basicLightbox.create(`<div class="modal">
+        <img src="${largeImageUrl}" width="1112" height="640">
+        </div>`)
     
-    // Створюємо та відображаємо модальне вікно з великим зображенням
-    const instance = basicLightbox.create(`
-        <div class="modal">
-            <img src="${largeImageUrl}" width="1112" height="640">
-        </div>
-    `);
-    instance.show();
+    instance.show()
 }
